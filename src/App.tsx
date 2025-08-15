@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "./themes/ThemeContext";
 import { AppNavigator } from "./navigation/AppNavigator";
 import { SplashScreen } from "./screens/SplashScreen";
@@ -7,7 +8,7 @@ import { WelcomeScreen } from "./screens/WelcomeScreen";
 import { SignInScreen } from "./screens/SignInScreen";
 import { SignUpScreen } from "./screens/SignUpScreen";
 import { BottomTabNavigator } from "./navigation/BottomTabNavigator";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 // Simple illustration components (you can replace these with more detailed SVGs later)
 const WelcomeIllustration1: React.FC = () => (
@@ -82,9 +83,41 @@ export default function App() {
     "splash" | "welcome" | "signin" | "signup" | "dashboard"
   >("splash");
   const [welcomePage, setWelcomePage] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  // Error boundary for web
+  if (error) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 20,
+        }}
+      >
+        <Text style={{ fontSize: 18, marginBottom: 20 }}>
+          Something went wrong
+        </Text>
+        <Text style={{ fontSize: 14, marginBottom: 20, textAlign: "center" }}>
+          {error}
+        </Text>
+        <TouchableOpacity
+          style={{ padding: 10, backgroundColor: "#0066FF", borderRadius: 8 }}
+          onPress={() => setError(null)}
+        >
+          <Text style={{ color: "white" }}>Try Again</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const handleSplashFinish = () => {
-    setCurrentScreen("welcome");
+    try {
+      setCurrentScreen("welcome");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+    }
   };
 
   const handleWelcomeNext = () => {
@@ -134,10 +167,14 @@ export default function App() {
   };
 
   const renderCurrentScreen = () => {
+    console.log("Current screen:", currentScreen); // Debug log
+
     switch (currentScreen) {
       case "splash":
+        console.log("Rendering splash screen"); // Debug log
         return <SplashScreen onFinish={handleSplashFinish} />;
       case "welcome":
+        console.log("Rendering welcome screen"); // Debug log
         return (
           <WelcomeScreen
             content={welcomeContent[welcomePage]}
@@ -148,6 +185,7 @@ export default function App() {
           />
         );
       case "signin":
+        console.log("Rendering signin screen"); // Debug log
         return (
           <SignInScreen
             onSignIn={handleSignIn}
@@ -156,6 +194,7 @@ export default function App() {
           />
         );
       case "signup":
+        console.log("Rendering signup screen"); // Debug log
         return (
           <SignUpScreen
             onSignUp={handleSignUpSubmit}
@@ -164,8 +203,14 @@ export default function App() {
           />
         );
       case "dashboard":
-        return <BottomTabNavigator />;
+        console.log("Rendering dashboard screen"); // Debug log
+        return (
+          <NavigationContainer>
+            <BottomTabNavigator />
+          </NavigationContainer>
+        );
       default:
+        console.log("Rendering default screen"); // Debug log
         return <SplashScreen onFinish={handleSplashFinish} />;
     }
   };
