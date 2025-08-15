@@ -5,6 +5,8 @@ import { AppNavigator } from "./navigation/AppNavigator";
 import { SplashScreen } from "./screens/SplashScreen";
 import { WelcomeScreen } from "./screens/WelcomeScreen";
 import { SignInScreen } from "./screens/SignInScreen";
+import { SignUpScreen } from "./screens/SignUpScreen";
+import { BottomTabNavigator } from "./navigation/BottomTabNavigator";
 import { View, Text } from "react-native";
 
 // Simple illustration components (you can replace these with more detailed SVGs later)
@@ -77,7 +79,7 @@ const welcomeContent = [
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "splash" | "welcome" | "signin"
+    "splash" | "welcome" | "signin" | "signup" | "dashboard"
   >("splash");
   const [welcomePage, setWelcomePage] = useState(0);
 
@@ -103,13 +105,32 @@ export default function App() {
   };
 
   const handleSignIn = async (email: string, password: string) => {
-    // TODO: Implement actual sign in logic
+    // No auth for now - directly go to dashboard
     console.log("Sign in:", email, password);
+    setCurrentScreen("dashboard");
   };
 
   const handleSignUp = () => {
-    // TODO: Navigate to sign up screen
-    console.log("Navigate to sign up");
+    setCurrentScreen("signup");
+  };
+
+  const handleSignUpBack = () => {
+    setCurrentScreen("signin");
+  };
+
+  const handleSignUpSubmit = async (
+    fullName: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => {
+    // No auth for now - directly go to dashboard
+    console.log("Sign up:", { fullName, phone, email, password });
+    setCurrentScreen("dashboard");
+  };
+
+  const handleSignUpToSignIn = () => {
+    setCurrentScreen("signin");
   };
 
   const renderCurrentScreen = () => {
@@ -134,6 +155,16 @@ export default function App() {
             onSignUp={handleSignUp}
           />
         );
+      case "signup":
+        return (
+          <SignUpScreen
+            onSignUp={handleSignUpSubmit}
+            onBack={handleSignUpBack}
+            onSignIn={handleSignUpToSignIn}
+          />
+        );
+      case "dashboard":
+        return <BottomTabNavigator />;
       default:
         return <SplashScreen onFinish={handleSplashFinish} />;
     }
