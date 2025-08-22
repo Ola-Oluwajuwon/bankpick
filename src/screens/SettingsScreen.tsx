@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../themes/ThemeContext";
+import { useNavigation } from "@react-navigation/native";
 import { SPACING } from "../constants/spacing";
 import { TYPOGRAPHY } from "../constants/typography";
 
@@ -25,6 +26,7 @@ interface SettingsItem {
 
 export const SettingsScreen: React.FC = () => {
   const { colors } = useTheme();
+  const navigation = useNavigation();
   const [biometricEnabled, setBiometricEnabled] = useState(true);
 
   const generalSettings: SettingsItem[] = [
@@ -72,6 +74,29 @@ export const SettingsScreen: React.FC = () => {
     },
   ];
 
+  const handleNavigate = (title: string) => {
+    switch (title) {
+      case "My Profile":
+        navigation.navigate("Profile" as never);
+        break;
+      case "Contact Us":
+        navigation.navigate("Notifications" as never);
+        break;
+      case "Language":
+        // placeholder — could open a language picker screen later
+        navigation.navigate("Profile" as never);
+        break;
+      case "Change Password":
+        navigation.navigate("EditProfile" as never);
+        break;
+      case "Privacy Policy":
+        navigation.navigate("Notifications" as never);
+        break;
+      default:
+        break;
+    }
+  };
+
   const renderSettingsItem = (item: SettingsItem) => (
     <TouchableOpacity
       key={item.id}
@@ -82,8 +107,7 @@ export const SettingsScreen: React.FC = () => {
             setBiometricEnabled(!biometricEnabled);
           }
         } else if (item.type === "navigation") {
-          // TODO: Navigate to specific settings pages
-          console.log("Navigate to:", item.title);
+          handleNavigate(item.title);
         }
       }}
       disabled={item.type === "toggle"}
@@ -161,12 +185,7 @@ export const SettingsScreen: React.FC = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerTitle}>
-          <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
-        </View>
-        <TouchableOpacity style={styles.logoutButton}>
-          <Ionicons name="log-out-outline" size={24} color={colors.text} />
-        </TouchableOpacity>
+        <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -183,40 +202,18 @@ export const SettingsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.xl + 40,
     paddingBottom: SPACING.lg,
   },
-  headerTitle: {
-    flex: 1,
-    alignItems: "center",
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
     fontSize: TYPOGRAPHY.sizes.xl,
     fontWeight: TYPOGRAPHY.weights.bold,
-  },
-  logoutButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
   },
   sectionHeader: {
     paddingHorizontal: SPACING.lg,
@@ -251,9 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: SPACING.md,
   },
-  itemContent: {
-    flex: 1,
-  },
+  itemContent: { flex: 1 },
   itemTitle: {
     fontSize: TYPOGRAPHY.sizes.base,
     fontWeight: TYPOGRAPHY.weights.medium,
@@ -263,11 +258,7 @@ const styles = StyleSheet.create({
     fontSize: TYPOGRAPHY.sizes.xs,
     lineHeight: TYPOGRAPHY.lineHeights.normal * TYPOGRAPHY.sizes.xs,
   },
-  itemRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: SPACING.sm,
-  },
+  itemRight: { flexDirection: "row", alignItems: "center", gap: SPACING.sm },
   itemValue: {
     fontSize: TYPOGRAPHY.sizes.sm,
     fontWeight: TYPOGRAPHY.weights.medium,

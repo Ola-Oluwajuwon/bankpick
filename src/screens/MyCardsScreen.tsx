@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../themes/ThemeContext";
 import { SPACING } from "../constants/spacing";
 import { TYPOGRAPHY } from "../constants/typography";
+import { useNavigation } from "@react-navigation/native";
 
 interface SpendingCategory {
   id: string;
@@ -22,6 +23,7 @@ interface SpendingCategory {
 
 export const MyCardsScreen: React.FC = () => {
   const { colors } = useTheme();
+  const navigation = useNavigation();
   const [spendingLimit, setSpendingLimit] = useState(4600);
 
   const spendingCategories: SpendingCategory[] = [
@@ -197,7 +199,10 @@ export const MyCardsScreen: React.FC = () => {
         <View style={styles.headerTitle}>
           <Text style={[styles.title, { color: colors.text }]}>My Cards</Text>
         </View>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => (navigation as any).navigate("AddCard")}
+        >
           <Ionicons name="add" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>

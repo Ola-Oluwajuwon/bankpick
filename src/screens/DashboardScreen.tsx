@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../themes/ThemeContext";
 import { SPACING } from "../constants/spacing";
 import { TYPOGRAPHY } from "../constants/typography";
+import { useNavigation } from "@react-navigation/native";
 
 interface Transaction {
   id: string;
@@ -24,6 +25,8 @@ interface Transaction {
 
 export const DashboardScreen: React.FC = () => {
   const { colors } = useTheme();
+  const navigation = useNavigation();
+  const nav = navigation as any;
 
   const transactions: Transaction[] = [
     {
@@ -109,7 +112,10 @@ export const DashboardScreen: React.FC = () => {
 
   const renderActionButtons = () => (
     <View style={styles.actionButtons}>
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity
+        style={styles.actionButton}
+        onPress={() => nav.navigate("Transfer")}
+      >
         <View style={[styles.actionIcon, { backgroundColor: colors.primary }]}>
           <Ionicons name="arrow-up" size={24} color={colors.card} />
         </View>
@@ -118,7 +124,10 @@ export const DashboardScreen: React.FC = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity
+        style={styles.actionButton}
+        onPress={() => nav.navigate("Transfer")}
+      >
         <View style={[styles.actionIcon, { backgroundColor: colors.primary }]}>
           <Ionicons name="arrow-down" size={24} color={colors.card} />
         </View>
@@ -127,7 +136,10 @@ export const DashboardScreen: React.FC = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity
+        style={styles.actionButton}
+        onPress={() => nav.navigate("Transfer")}
+      >
         <View style={[styles.actionIcon, { backgroundColor: colors.primary }]}>
           <Ionicons name="cash" size={24} color={colors.card} />
         </View>
@@ -136,7 +148,10 @@ export const DashboardScreen: React.FC = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity
+        style={styles.actionButton}
+        onPress={() => nav.navigate("Transfer")}
+      >
         <View style={[styles.actionIcon, { backgroundColor: colors.primary }]}>
           <Ionicons name="cloud-upload" size={24} color={colors.card} />
         </View>
@@ -148,7 +163,11 @@ export const DashboardScreen: React.FC = () => {
   );
 
   const renderTransaction = (transaction: Transaction) => (
-    <View key={transaction.id} style={styles.transactionItem}>
+    <TouchableOpacity
+      key={transaction.id}
+      style={styles.transactionItem}
+      onPress={() => nav.navigate("TransactionDetail", { id: transaction.id })}
+    >
       <View
         style={[
           styles.transactionIcon,
@@ -180,7 +199,7 @@ export const DashboardScreen: React.FC = () => {
         {transaction.isExpense ? "- " : ""}
         {transaction.amount}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -204,7 +223,10 @@ export const DashboardScreen: React.FC = () => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.searchButton}>
+        <TouchableOpacity
+          style={styles.searchButton}
+          onPress={() => nav.navigate("Notifications")}
+        >
           <Ionicons name="search" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
@@ -222,7 +244,7 @@ export const DashboardScreen: React.FC = () => {
             <Text style={[styles.transactionsTitle, { color: colors.text }]}>
               Transaction
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => nav.navigate("Transactions")}>
               <Text style={[styles.seeAllText, { color: colors.primary }]}>
                 See All
               </Text>

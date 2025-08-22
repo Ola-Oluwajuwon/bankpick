@@ -35,3 +35,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Learning Documentation (exclude from GitHub)
+docs/
+LEARNING_GUIDE.md
+REACT_NATIVE_LEARNING.md

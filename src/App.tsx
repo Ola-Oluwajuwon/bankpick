@@ -9,6 +9,7 @@ import { SignInScreen } from "./screens/SignInScreen";
 import { SignUpScreen } from "./screens/SignUpScreen";
 import { BottomTabNavigator } from "./navigation/BottomTabNavigator";
 import { View, Text, TouchableOpacity } from "react-native";
+import { RootNavigator } from "./navigation/RootNavigator";
 
 // Simple illustration components (you can replace these with more detailed SVGs later)
 const WelcomeIllustration1: React.FC = () => (
@@ -206,7 +207,7 @@ export default function App() {
         console.log("Rendering dashboard screen"); // Debug log
         return (
           <NavigationContainer>
-            <BottomTabNavigator />
+            <RootNavigator />
           </NavigationContainer>
         );
       default:
