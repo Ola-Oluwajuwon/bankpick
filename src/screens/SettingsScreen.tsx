@@ -67,6 +67,12 @@ export const SettingsScreen: React.FC = () => {
     },
     {
       id: "6",
+      title: "Terms & Conditions",
+      icon: "document-text",
+      type: "navigation",
+    },
+    {
+      id: "7",
       title: "Biometric",
       icon: "finger-print",
       type: "toggle",
@@ -83,14 +89,16 @@ export const SettingsScreen: React.FC = () => {
         navigation.navigate("Notifications" as never);
         break;
       case "Language":
-        // placeholder — could open a language picker screen later
         navigation.navigate("Profile" as never);
         break;
       case "Change Password":
-        navigation.navigate("EditProfile" as never);
+        navigation.navigate("ChangePassword" as never);
         break;
       case "Privacy Policy":
         navigation.navigate("Notifications" as never);
+        break;
+      case "Terms & Conditions":
+        navigation.navigate("Terms" as never);
         break;
       default:
         break;
@@ -103,7 +111,7 @@ export const SettingsScreen: React.FC = () => {
       style={styles.settingsItem}
       onPress={() => {
         if (item.type === "toggle") {
-          if (item.id === "6") {
+          if (item.id === "7") {
             setBiometricEnabled(!biometricEnabled);
           }
         } else if (item.type === "navigation") {
@@ -159,7 +167,7 @@ export const SettingsScreen: React.FC = () => {
           <Switch
             value={item.enabled}
             onValueChange={(value) => {
-              if (item.id === "6") {
+              if (item.id === "7") {
                 setBiometricEnabled(value);
               }
             }}

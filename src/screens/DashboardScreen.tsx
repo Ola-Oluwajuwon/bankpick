@@ -4,22 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
   ScrollView,
-  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../themes/ThemeContext";
 import { SPACING } from "../constants/spacing";
 import { TYPOGRAPHY } from "../constants/typography";
-import { useNavigation } from "@react-navigation/native";
 
 interface Transaction {
   id: string;
-  icon: string;
   name: string;
   category: string;
   amount: string;
+  icon: string;
   isExpense: boolean;
 }
 
@@ -31,37 +29,46 @@ export const DashboardScreen: React.FC = () => {
   const transactions: Transaction[] = [
     {
       id: "1",
-      icon: "logo-apple",
       name: "Apple Store",
       category: "Entertainment",
-      amount: "$5,99",
+      amount: "$5.99",
+      icon: "logo-apple",
       isExpense: true,
     },
     {
       id: "2",
-      icon: "musical-notes",
-      name: "Spotify",
-      category: "Music",
-      amount: "$12,99",
-      isExpense: true,
-    },
-    {
-      id: "3",
-      icon: "download",
-      name: "Money Transfer",
-      category: "Transaction",
-      amount: "$300",
+      name: "Salary",
+      category: "Income",
+      amount: "$3,500.00",
+      icon: "cash",
       isExpense: false,
     },
     {
-      id: "4",
-      icon: "cart",
+      id: "3",
       name: "Grocery",
       category: "Shopping",
-      amount: "$88",
+      amount: "$88.00",
+      icon: "cart",
       isExpense: true,
     },
   ];
+
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.headerLeft}>
+        <Text style={[styles.greeting, { color: colors.secondaryText }]}>
+          Good morning
+        </Text>
+        <Text style={[styles.name, { color: colors.text }]}>Tanya</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.searchButton}
+        onPress={() => nav.navigate("Notifications")}
+      >
+        <Ionicons name="search" size={24} color={colors.text} />
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderCreditCard = () => (
     <View
@@ -70,7 +77,6 @@ export const DashboardScreen: React.FC = () => {
         { backgroundColor: colors.tertiaryBackground },
       ]}
     >
-      {/* Card Header */}
       <View style={styles.cardHeader}>
         <View style={styles.chipIcon}>
           <Ionicons name="card" size={20} color={colors.text} />
@@ -80,12 +86,10 @@ export const DashboardScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* Card Number */}
       <Text style={[styles.cardNumber, { color: colors.text }]}>
         4562 1122 4595 7852
       </Text>
 
-      {/* Card Footer */}
       <View style={styles.cardFooter}>
         <View style={styles.cardInfo}>
           <Text style={[styles.cardLabel, { color: colors.secondaryText }]}>
@@ -138,13 +142,13 @@ export const DashboardScreen: React.FC = () => {
 
       <TouchableOpacity
         style={styles.actionButton}
-        onPress={() => nav.navigate("Transfer")}
+        onPress={() => nav.navigate("RequestMoney")}
       >
         <View style={[styles.actionIcon, { backgroundColor: colors.primary }]}>
-          <Ionicons name="cash" size={24} color={colors.card} />
+          <Ionicons name="hand-left" size={24} color={colors.card} />
         </View>
         <Text style={[styles.actionText, { color: colors.secondaryText }]}>
-          Loan
+          Request
         </Text>
       </TouchableOpacity>
 
@@ -202,68 +206,39 @@ export const DashboardScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-  return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.background} />
-
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.userInfo}>
-          <View
-            style={[styles.profilePic, { backgroundColor: colors.primary }]}
-          >
-            <Text style={[styles.profileText, { color: colors.card }]}>TM</Text>
-          </View>
-          <View>
-            <Text style={[styles.welcomeText, { color: colors.secondaryText }]}>
-              Welcome back,
-            </Text>
-            <Text style={[styles.userName, { color: colors.text }]}>
-              Tanya Myroniuk
-            </Text>
-          </View>
-        </View>
+  const renderTransactionsSection = () => (
+    <View style={styles.transactionsSection}>
+      <View style={styles.transactionsHeader}>
+        <Text style={[styles.transactionsTitle, { color: colors.text }]}>
+          Recent Transaction
+        </Text>
         <TouchableOpacity
-          style={styles.searchButton}
-          onPress={() => nav.navigate("Notifications")}
+          onPress={() => nav.navigate("Transactions")}
         >
-          <Ionicons name="search" size={24} color={colors.text} />
+          <Text style={[styles.seeAllText, { color: colors.primary }]}>
+            See All
+          </Text>
         </TouchableOpacity>
       </View>
 
+      {transactions.map(renderTransaction)}
+    </View>
+  );
+
+  return (
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Credit Card */}
+        {renderHeader()}
         {renderCreditCard()}
-
-        {/* Action Buttons */}
         {renderActionButtons()}
-
-        {/* Transactions */}
-        <View style={styles.transactionsSection}>
-          <View style={styles.transactionsHeader}>
-            <Text style={[styles.transactionsTitle, { color: colors.text }]}>
-              Transaction
-            </Text>
-            <TouchableOpacity onPress={() => nav.navigate("Transactions")}>
-              <Text style={[styles.seeAllText, { color: colors.primary }]}>
-                See All
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.transactionsList}>
-            {transactions.map(renderTransaction)}
-          </View>
-        </View>
+        {renderTransactionsSection()}
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -272,27 +247,13 @@ const styles = StyleSheet.create({
     paddingTop: SPACING.xl + 40,
     paddingBottom: SPACING.lg,
   },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  profilePic: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: SPACING.md,
-  },
-  profileText: {
-    fontSize: TYPOGRAPHY.sizes.lg,
-    fontWeight: TYPOGRAPHY.weights.bold,
-  },
-  welcomeText: {
+  headerLeft: { flex: 1 },
+  greeting: {
     fontSize: TYPOGRAPHY.sizes.sm,
+    marginBottom: SPACING.xs,
   },
-  userName: {
-    fontSize: TYPOGRAPHY.sizes.base,
+  name: {
+    fontSize: TYPOGRAPHY.sizes.xl,
     fontWeight: TYPOGRAPHY.weights.bold,
   },
   searchButton: {
@@ -374,10 +335,11 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: TYPOGRAPHY.sizes.sm,
-    fontWeight: TYPOGRAPHY.weights.medium,
+    textAlign: "center",
   },
   transactionsSection: {
     paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.xl,
   },
   transactionsHeader: {
     flexDirection: "row",
@@ -393,13 +355,11 @@ const styles = StyleSheet.create({
     fontSize: TYPOGRAPHY.sizes.sm,
     fontWeight: TYPOGRAPHY.weights.medium,
   },
-  transactionsList: {
-    gap: SPACING.md,
-  },
   transactionItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SPACING.sm,
+    paddingVertical: SPACING.md,
+    marginBottom: SPACING.sm,
   },
   transactionIcon: {
     width: 40,
@@ -409,9 +369,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: SPACING.md,
   },
-  transactionInfo: {
-    flex: 1,
-  },
+  transactionInfo: { flex: 1 },
   transactionName: {
     fontSize: TYPOGRAPHY.sizes.base,
     fontWeight: TYPOGRAPHY.weights.medium,

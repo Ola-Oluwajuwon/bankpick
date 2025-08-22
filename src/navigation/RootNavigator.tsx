@@ -10,6 +10,9 @@ import { EditProfileScreen } from "../screens/EditProfileScreen";
 import { AddCardScreen } from "../screens/AddCardScreen";
 import { AllCardsScreen } from "../screens/AllCardsScreen";
 import { TransactionHistoryScreen } from "../screens/TransactionHistoryScreen";
+import { ChangePasswordScreen } from "../screens/ChangePasswordScreen";
+import { TermsScreen } from "../screens/TermsScreen";
+import { RequestMoneyScreen } from "../screens/RequestMoneyScreen";
 
 export type RootParamList = {
   Tabs: undefined;
@@ -22,6 +25,9 @@ export type RootParamList = {
   AddCard: undefined;
   AllCards: undefined;
   TransactionHistory: undefined;
+  ChangePassword: undefined;
+  Terms: undefined;
+  RequestMoney: undefined;
 };
 
 const Stack = createStackNavigator<RootParamList>();
@@ -45,6 +51,9 @@ export const RootNavigator: React.FC = () => {
         name="TransactionHistory"
         component={TransactionHistoryScreen}
       />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="RequestMoney" component={RequestMoneyScreen} />
     </Stack.Navigator>
   );
 };
